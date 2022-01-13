@@ -1,0 +1,27 @@
+{
+  "dbDir": "~/mongo/build/install/db",
+  "logDir": "~/mongo/build/install/log",
+  "cluster": {
+    "configsvr": {
+      "bindIp": "localhost",
+      "instances": [
+        { "port": 27019 },
+        { "port": 27029 },
+        { "port": 27039 }
+      ]
+    },
+    "shardsvr":{
+      "bindIp": "localhost",
+      "instances": [
+        { "port": 27018 },
+        { "port": 27028 }
+      ]
+    },
+    "mongossvr": {
+      "bindIp": "0.0.0.0",
+      "instances": [
+        { "port": 27017 }
+      ]
+    }
+  }
+}
