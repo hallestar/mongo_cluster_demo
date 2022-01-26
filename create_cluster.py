@@ -24,7 +24,7 @@ class CfgField(object):
 class CfgShard(CfgField):
     def __init__(self, role=None, config_db=None):
         self.clusterRole = role
-        self.configDb = config_db
+        self.configDB = config_db
 
 
 class CfgNet(CfgField):
@@ -102,7 +102,7 @@ class CreatorConfig(CfgCreatorBase):
             inst_name = '{}{}'.format(self.ROLE, i+1)
 
             cfg.net = CfgNet(bind_ip=bind_ip, port=inst_dict['port'])
-            cfg.storage = CfgStorage(db_path=os.path.join(self.log_path, inst_name))
+            cfg.storage = CfgStorage(db_path=os.path.join(self.db_path, inst_name))
             cfg.sharding = CfgShard(role=self.ROLE)
             cfg.replication = CfgReplication(repl_set_name=self.ROLE)
             cfg.systemLog = CfgSystemLog(destination='file',
