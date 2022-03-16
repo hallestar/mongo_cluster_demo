@@ -73,6 +73,8 @@ class MongoCfg(object):
 class CfgCreatorBase(object):
 
     ROLE = None
+    LOG_SUFFIX = '.log'
+    CONF_SUFFIX = '.conf'
 
     def __init__(self, config_dict):
         self.db_path = config_dict['dbDir']
@@ -82,7 +84,7 @@ class CfgCreatorBase(object):
         self.create(**kwargs)
 
     def _save(self, inst_name, content_dict):
-        with open(os.path.join('./etc', inst_name + '.conf'), 'w') as f:
+        with open(os.path.join('./etc', inst_name + self.CONF_SUFFIX), 'w') as f:
             data = yaml.dump(content_dict)
             f.write(data)
 
@@ -106,7 +108,7 @@ class CreatorConfig(CfgCreatorBase):
             cfg.sharding = CfgShard(role=self.ROLE)
             cfg.replication = CfgReplication(repl_set_name=self.ROLE)
             cfg.systemLog = CfgSystemLog(destination='file',
-                                           path=os.path.join(self.log_path, inst_name + '.log'),
+                                           path=os.path.join(self.log_path, inst_name + self.LOG_SUFFIX),
                                            log_append=True)
             info = cfg.to_dict()
             self._save(inst_name, info)
@@ -125,10 +127,10 @@ class CreatorShard(CfgCreatorBase):
 
             cfg.sharding = CfgShard(role=self.ROLE)
             cfg.net = CfgNet(bind_ip=bind_ip, port=inst_dict['port'])
-            cfg.storage = CfgStorage(db_path=os.path.join(self.log_path, inst_name))
+            cfg.storage = CfgStorage(db_path=os.path.join(self.db_path, inst_name))
             cfg.replication = CfgReplication(repl_set_name=inst_name)
             cfg.systemLog = CfgSystemLog(destination='file',
-                                         path=os.path.join(self.log_path, inst_name + '.log'),
+                                         path=os.path.join(self.log_path, inst_name + self.LOG_SUFFIX),
                                          log_append=True)
 
             info = cfg.to_dict()
@@ -159,7 +161,7 @@ class CreatorMongos(CfgCreatorBase):
             cfg.net = CfgNet(bind_ip=bind_ip, port=inst_dict['port'])
             cfg.sharding = CfgShard(config_db=config_db)
             cfg.systemLog = CfgSystemLog(destination='file',
-                                         path=os.path.join(self.log_path, inst_name + '.log'),
+                                         path=os.path.join(self.log_path, inst_name + self.LOG_SUFFIX),
                                          log_append=True)
 
             info = cfg.to_dict()
